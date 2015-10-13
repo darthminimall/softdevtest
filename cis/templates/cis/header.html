@@ -1,0 +1,21 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#cis-navbar" 
+                    aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand" href="{% url 'cis:index' %}">CIS</a>
+        </div>
+        <div class="collapse navbar-collapse" id="cis-navbar">
+            <ul class="nav navbar-nav">
+                {% for link in nav %}
+                    <li {% if forloop.last %}class="active"{% endif %}>
+                        <a href="{{ link.1 }}">{{ link.0 }} </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</nav>

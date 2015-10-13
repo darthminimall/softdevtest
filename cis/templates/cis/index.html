@@ -1,0 +1,47 @@
+{% extends "cis/base.html" %}
+
+{% block body %}
+<h1 class="centered">Inventories</h1>
+<div {% if not failure %} class="collapse" {% else %} class="text-danger" 
+        {% endif %}>
+    {{ fmsg }}
+</div>
+<table class="table">
+    <tr>
+        <th> Inventory Name </th>
+        <th class="ta-center"> Number of Computers</th>
+        <th class="ta-center"> Delete </th>
+    </tr>
+    {% for inventory in inv_list %}
+    <tr>
+        <td>
+            <a href="{% url 'cis:inv' inventory.id %}">{{ inventory.name }}</a>
+        </td>
+        <td class="ta-center"> {{ inventory.computer_set.count }} </td>
+        <td class="ta-center">
+            <a class="text-danger" href="{% url 'cis:del_inv' inventory.id %}">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr class="collapse" id="add_inv_form">
+        <form  action="{% url 'cis:add_inv' %}" method="post">
+        {% csrf_token %}
+        <td><input type="text" hint-text="name" name="name"></input></td>
+        <td></td>
+        <td class="ta-center">
+            <input class="btn btn-primary" type="submit" value="add"></input>
+        </td>
+        </form>
+    </tr>
+   <tr>
+        <td><a role="button" data-toggle="collapse" href="#add_inv_form"
+        aria-expanded="false" aria-controls="add_inv_form">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Add inventory</a></td>
+        <td></td>
+        <td></td>
+   </tr>
+</table>
+{% endblock %}
