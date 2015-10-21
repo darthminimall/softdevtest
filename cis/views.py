@@ -3,36 +3,41 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 from .models import Inventory, Computer
-from .forms import addInvForm, AddCompForm, EditCompForm
+from .forms import AddInvForm, AddCompForm, EditCompForm
 
 def index(request):
+    """A view that displays a list of inventories."""
     context = {'inv_list': Inventory.objects.all(),
             'nav': (('Inventories',reverse('cis:index')),),
             'fmsg': '',
             'failure': False,
-            'form': addInvForm(),
+            'form': AddInvForm(),
     }
     return render(request, 'cis/index.html', context)
 
 def delete_inventory(request, inv_id):
+    """A view that deletes an inventory from the database."""
     context = {'inv_list': Inventory.objects.all(),
             'nav': (('Inventories', reverse('cis:index')),),
             'fmsg' : '',
             'failure' : False,
     }
     inv = get_object_or_404(Inventory, pk=inv_id)
+    for comp in inv.computer_set:
+        comp.delete()
     inv.delete()
     return HttpResponseRedirect(reverse('cis:index'))
 
 def add_inventory(request):
+    """A view for adding inventories."""
     if request.method == 'POST':
-        form = addInvForm(request.POST)
+        form = AddInvForm(request.POST)
         if form.is_valid():
             i = Inventory(name=form.cleaned_data['name'])
             i.save()
             return HttpResponseRedirect(reverse('cis:index'))
     else:
-        form = addInvForm()
+        form = AddInvForm()
     context = {
             'nav':(('Inventories', reverse('cis:index')),
                 ('Add Inventory', reverse('cis:add_inv'))),
@@ -41,6 +46,7 @@ def add_inventory(request):
     return render(request, 'cis/add_inventory.html', context)
 
 def inventory(request, inv_id):
+    """A view for seeing a list of computers in an inventory."""
     inv = get_object_or_404(Inventory, pk=inv_id);
     context = {'nav': (('Inventories',reverse('cis:index')),
         (inv.name, reverse('cis:inv',args=(inv.id,))),),
@@ -50,6 +56,7 @@ def inventory(request, inv_id):
     return render(request, 'cis/inventory.html', context)
 
 def add_computer(request,inv_id):
+    """A view for adding computers."""
     def_inv = get_object_or_404(Inventory, pk=inv_id)
     if request.method == 'POST':
         form = AddCompForm(request.POST);
@@ -73,6 +80,7 @@ def add_computer(request,inv_id):
     return render(request, 'cis/add_computer.html', context)
 
 def computer(request,inv_id,cmp_id):
+    """A view for viewing the details of a computer"""
     inv = get_object_or_404(Inventory,pk=inv_id)
     comp = get_object_or_404(Computer, pk=cmp_id)
     context = {
@@ -88,6 +96,7 @@ def computer(request,inv_id,cmp_id):
     return render(request,'cis/computer.html',context);
 
 def edit_computer(request,inv_id,cmp_id):
+    """A view for ediging the details of a computer."""
     inv = get_object_or_404(Inventory,pk=inv_id)
     comp = get_object_or_404(Computer,pk=cmp_id)
     if request.method == 'POST':
@@ -121,6 +130,7 @@ def edit_computer(request,inv_id,cmp_id):
     return render(request,'cis/edit_computer.html',context)
 
 def delete_computer(self,inv_id,cmp_id):
+    """A view for deleting computers."""
     computer = get_object_or_404(Computer,pk=cmp_id)
     cpmputer.delete()
     return HttpResponseRedirect(reverse('cis:inventory',args=(inv_id,)))

@@ -106,4 +106,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Tells Crispy Forms to use bootstrap3
 CRISPY_TEMPLATE_PACK='bootstrap3'
