@@ -1,0 +1,13 @@
+{% extends 'cis/base.html' %}
+
+{% block body %}
+
+<h1>{{ comp.manufacturer }} {{ comp.sn }} </h1>
+<h2>Comments</h2>
+<p> {{ comp.comments }} </p>
+<a class="btn btn-primary " 
+                     href="{% url 'cis:edit_cmp' inv.id comp.id %}">
+    Edit
+</a>
+
+{% endblock %}

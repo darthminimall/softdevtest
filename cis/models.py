@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 class Inventory(models.Model):
     """
@@ -8,6 +9,10 @@ class Inventory(models.Model):
 
     def __unicode__(self):
         return unicode(self.name)
+
+def inv_unique(iname):
+    return Inventory.objects.filter(name__exact==iname).empty()
+
 
 class Computer(models.Model):
     """

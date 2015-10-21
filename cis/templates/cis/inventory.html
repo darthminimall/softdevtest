@@ -1,5 +1,31 @@
 {% extends 'cis/base.html' %}
 
 {% block body %}
-<h1> {{ iname }} </h1>
+<h1> {{ inv.name }} </h1>
+<table class="table">
+    <tr>
+        <th>Manufacturer</th>
+        <th>Serial Number</th>
+        <th>Comments</th>
+        <th class="ta-center">Delete?</th>
+    </tr>
+    {% for computer in clist %}
+    <tr>
+        <td>{{ computer.manufacturer }}</td>
+        <td><a href="{% url 'cis:cmp' inv.id computer.id %}">{{ computer.sn }}</a></td>
+        <td ><div style="max-width:30em;white-space:nowrap; overflow:hidden;">
+            {{ computer.comments }}
+        </div></td>
+        <td class="ta-center"><a class="text-danger" href="{% url 'cis:del_cmp' inv.id computer.id %}"><span
+               class="glyphicon glyphicon-remove"></span></a></td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td><a href="{% url 'cis:add_cmp' inv.id %}">
+                <span class="glyphicon glyphicon-plus"></span>Add Computer</a></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
 {% endblock %}

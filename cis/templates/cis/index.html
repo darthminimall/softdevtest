@@ -1,5 +1,7 @@
 {% extends "cis/base.html" %}
 
+{% load crispy_forms_tags %}
+
 {% block body %}
 <h1 class="centered">Inventories</h1>
 <div {% if not failure %} class="collapse" {% else %} class="text-danger" 
@@ -25,19 +27,8 @@
         </td>
     </tr>
     {% endfor %}
-    <tr class="collapse" id="add_inv_form">
-        <form  action="{% url 'cis:add_inv' %}" method="post">
-        {% csrf_token %}
-        <td><input type="text" hint-text="name" name="name"></input></td>
-        <td></td>
-        <td class="ta-center">
-            <input class="btn btn-primary" type="submit" value="add"></input>
-        </td>
-        </form>
-    </tr>
    <tr>
-        <td><a role="button" data-toggle="collapse" href="#add_inv_form"
-        aria-expanded="false" aria-controls="add_inv_form">
+       <td><a href="{% url 'cis:add_inv' %}">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         Add inventory</a></td>
         <td></td>
